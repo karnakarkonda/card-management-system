@@ -50,7 +50,7 @@ public class UserService {
                 .build();
 
         User savedUser = userRepo.save(user);
-        log.info("user saved successfully with userId: {}", savedUser.getUserId());
+        log.info("user saved successfully with  userId: {}", savedUser.getUserId());
         return savedUser;
     }
 

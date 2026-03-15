@@ -5,12 +5,16 @@ import com.infy.card.management.system.Model.Card;
 import com.infy.card.management.system.Model.User;
 import com.infy.card.management.system.dto.CardRequest;
 import com.infy.card.management.system.enums.CardStatus;
+import com.infy.card.management.system.exceptions.CardNotFoundException;
 import com.infy.card.management.system.exceptions.UserNotFoundException;
 import com.infy.card.management.system.repository.AddressRepo;
 import com.infy.card.management.system.repository.CardRepo;
 import com.infy.card.management.system.repository.UserRepo;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
+import org.springframework.web.bind.annotation.GetMapping;
+
+import java.util.List;
 
 
 @Slf4j
@@ -58,5 +62,28 @@ public class CardService {
         Card savedCard = cardRepo.save(card);
         log.info("Card saved successfully with cardId: {}", savedCard.getCardId());
         return savedCard;
+    }
+
+    public List<Card> getCardByUserId(Integer userId) {
+        log.info("request received for fetching card details with userId: {}", userId);
+        List<Card> fetchedCard = cardRepo.findByUserUserId(userId);
+        if(fetchedCard.isEmpty()) {
+            log.error("Card details not found for userId: {}", userId);
+            throw new CardNotFoundException("Card details are not present for the given userId: " + userId);
+        }
+        log.info("Card details fetched successfully for userId: {}", userId);
+        return fetchedCard;
+    }
+
+
+    public List<Card> getAllCards() {
+        log.info("request received for fetching all card details");
+        List<Card> fetchedCards = cardRepo.findAll();
+        if(fetchedCards.isEmpty()) {
+            log.error("No card details found in the system");
+            throw new CardNotFoundException("No card details are present in the system");
+        }
+        log.info("All card details fetched successfully");
+        return fetchedCards;
     }
 }

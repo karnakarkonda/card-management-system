@@ -46,7 +46,7 @@ public class UserService {
                 .title(request.getTitle())
                 .name(request.getName())
                 .pan(request.getPan())
-                .kycStatus(KycStatus.NOT_DONE)
+                .kycStatus(KycStatus.DONE)
                 .build();
 
         User savedUser = userRepo.save(user);

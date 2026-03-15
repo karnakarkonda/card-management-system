@@ -22,4 +22,10 @@ public class GlobalExceptionHandler {
 
         return new ResponseEntity<>(response, HttpStatus.NOT_FOUND);
     }
+
+    @ExceptionHandler(CardNotFoundException.class)
+    public ResponseEntity<ApiResponse> handleCardNotFoundException(CardNotFoundException ex) {
+        ApiResponse response = new ApiResponse(ex.getMessage(), null);
+        return new ResponseEntity<>(response, HttpStatus.NOT_FOUND);
+    }
 }

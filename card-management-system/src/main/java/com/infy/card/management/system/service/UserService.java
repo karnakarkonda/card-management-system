@@ -33,21 +33,11 @@ public class UserService {
     public User saveUser(UserRequest request) {
 
         log.info("request received for saving user with phone number: {}", request.getPhoneNumber());
-        userRepo.findByPhoneNumber(request.getPhoneNumber())
-                .ifPresent(existingUser -> {
-                    log.error("User already exists with phone number: {}", request.getPhoneNumber());
-                    throw new UserAlreadyExists(
-                            "User already exists with the phone number: " + request.getPhoneNumber()
-                    );
-                });
-        User user = User.builder()
-                .phoneNumber(request.getPhoneNumber())
-                .password(bCryptPasswordEncoder.encode(request.getPassword()))
-                .title(request.getTitle())
-                .name(request.getName())
-                .pan(request.getPan())
-                .kycStatus(KycStatus.DONE)
-                .build();
+        userRepo.findByPhoneNumber(request.getPhoneNumber()).ifPresent(existingUser -> {
+            log.error("User already exists with phone number: {}", request.getPhoneNumber());
+            throw new UserAlreadyExists("User already exists with the phone number: " + request.getPhoneNumber());
+        });
+        User user = User.builder().phoneNumber(request.getPhoneNumber()).password(bCryptPasswordEncoder.encode(request.getPassword())).title(request.getTitle()).name(request.getName()).pan(request.getPan()).kycStatus(KycStatus.DONE).build();
 
         User savedUser = userRepo.save(user);
         log.info("user saved successfully with  userId: {}", savedUser.getUserId());
@@ -65,38 +55,11 @@ public class UserService {
         Address address = addressRepo.findByUserUserId(userId);
         if (address != null) {
             log.warn("Address details found for userId: {}", userId);
-            updatedAddress = AddressResponse.builder()
-                    .addressId(address.getAddressId())
-                    .userId(address.getUser().getUserId())
-                    .line1(address.getLine1())
-                    .line2(address.getLine2())
-                    .line3(address.getLine3())
-                    .city(address.getCity())
-                    .state(address.getState())
-                    .country(address.getCountry())
-                    .pincode(address.getPincode())
-                    .build();
+            updatedAddress = AddressResponse.builder().addressId(address.getAddressId()).userId(address.getUser().getUserId()).line1(address.getLine1()).line2(address.getLine2()).line3(address.getLine3()).city(address.getCity()).state(address.getState()).country(address.getCountry()).pincode(address.getPincode()).build();
         } else {
             log.info("Address details not found for userId: {}", userId);
-            updatedAddress = AddressResponse.builder()
-                    .addressId(null)
-                    .line1(null)
-                    .line2(null)
-                    .line3(null)
-                    .city(null)
-                    .state(null)
-                    .country(null)
-                    .pincode(null)
-                    .build();
+            updatedAddress = AddressResponse.builder().addressId(null).line1(null).line2(null).line3(null).city(null).state(null).country(null).pincode(null).build();
         }
-        return UserDetailsResponse.builder()
-                .userId(Long.valueOf(fetchedUser.getUserId()))
-                .phoneNumber(fetchedUser.getPhoneNumber())
-                .title(fetchedUser.getTitle())
-                .name(fetchedUser.getName())
-                .pan(fetchedUser.getPan())
-                .kycStatus(fetchedUser.getKycStatus())
-                .address(updatedAddress)
-                .build();
+        return UserDetailsResponse.builder().userId(Long.valueOf(fetchedUser.getUserId())).phoneNumber(fetchedUser.getPhoneNumber()).title(fetchedUser.getTitle()).name(fetchedUser.getName()).pan(fetchedUser.getPan()).kycStatus(fetchedUser.getKycStatus()).address(updatedAddress).build();
     }
 }

@@ -12,7 +12,6 @@ import com.infy.card.management.system.repository.CardRepo;
 import com.infy.card.management.system.repository.UserRepo;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
-import org.springframework.web.bind.annotation.GetMapping;
 
 import java.util.List;
 
@@ -44,7 +43,7 @@ public class CardService {
             throw new UserNotFoundException("Address details are not present for the given userId: " + request.getUserId());
         });
 
-        if(fetchedUser.getKycStatus().name().equals("NOT_DONE")){
+        if (fetchedUser.getKycStatus().name().equals("NOT_DONE")) {
             log.error("KYC not done for userId: {}", request.getUserId());
             throw new UserNotFoundException("KYC is not done for the given userId: " + request.getUserId());
         }
@@ -67,7 +66,7 @@ public class CardService {
     public List<Card> getCardByUserId(Integer userId) {
         log.info("request received for fetching card details with userId: {}", userId);
         List<Card> fetchedCard = cardRepo.findByUserUserId(userId);
-        if(fetchedCard.isEmpty()) {
+        if (fetchedCard.isEmpty()) {
             log.error("Card details not found for userId: {}", userId);
             throw new CardNotFoundException("Card details are not present for the given userId: " + userId);
         }
@@ -79,7 +78,7 @@ public class CardService {
     public List<Card> getAllCards() {
         log.info("request received for fetching all card details");
         List<Card> fetchedCards = cardRepo.findAll();
-        if(fetchedCards.isEmpty()) {
+        if (fetchedCards.isEmpty()) {
             log.error("No card details found in the system");
             throw new CardNotFoundException("No card details are present in the system");
         }

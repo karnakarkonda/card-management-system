@@ -15,7 +15,7 @@ public class FilterChain {
                 .authorizeHttpRequests(auth -> auth
                         .anyRequest().permitAll()
                 );
-
+ // dummy code
         return http.build();
     }
 }

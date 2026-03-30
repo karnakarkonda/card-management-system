@@ -7,7 +7,6 @@ import com.infy.card.management.system.dto.UserResponse;
 import com.infy.card.management.system.response.ApiResponse;
 import com.infy.card.management.system.service.UserService;
 import jakarta.validation.Valid;
-import lombok.Data;
 import lombok.extern.slf4j.Slf4j;
 import org.modelmapper.ModelMapper;
 import org.springframework.http.HttpStatus;
@@ -46,5 +45,7 @@ public class UserController {
         apiResponse.setMessage("User details fetched successfully for userId: " + userId);
         apiResponse.setData(userService.getUserById(userId));
         return ResponseEntity.ok(apiResponse);
+
+
     }
 }
